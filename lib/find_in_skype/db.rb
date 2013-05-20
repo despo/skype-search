@@ -1,28 +1,43 @@
 require 'sqlite3'
+require 'active_record'
+
 module FindInSkype
   class DB
     def initialize database
-      @database = SQLite3::Database.new(database)
+      ActiveRecord::Base.establish_connection({
+        adapter:  'sqlite3',
+        database: database
+      })
     end
 
     def find_contacts
-      @database.execute("SELECT DISTINCT(dialog_partner) FROM Messages")
+      Messages.select("distinct(dialog_partner)")
     end
 
     def find_messages_between user
-      @database.execute("SELECT author, from_dispname, datetime(timestamp, 'unixepoch') as date, body_xml FROM Messages where dialog_partner = '#{user}' ORDER BY timestamp")
+      Messages.where(:dialog_partner => user).order(:timestamp)
     end
 
     def find_conversations
-      @database.execute("select id, displayname from conversations")
+      Conversations.all
     end
 
     def find_conversation_by_id conversation_id
-      @database.execute("SELECT author, from_dispname, datetime(timestamp, 'unixepoch') as date, body_xml FROM Messages where convo_id = #{conversation_id} ORDER BY timestamp")
+      Messages.where(:convo_id => conversation_id).order(:timestamp)
     end
 
     def search_for string
-      @database.execute("SELECT author, from_dispname, datetime(timestamp, 'unixepoch') as date, body_xml FROM Messages where body_xml LIKE '%#{string}%' ORDER BY timestamp")
+      Messages.where('body_xml like ?', string).order(:timestamp)
     end
   end
+
+  private
+  class Messages < ActiveRecord::Base
+    self.inheritance_column = 'class_type'
+  end
+
+  class Conversations < ActiveRecord::Base
+    self.inheritance_column = 'class_type'
+  end
+
 end
