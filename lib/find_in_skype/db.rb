@@ -16,5 +16,9 @@ module FindInSkype
     def find_conversations
       @database.execute("select id, displayname from conversations")
     end
+
+    def find_conversation_by_id conversation_id
+      @database.execute("SELECT author, from_dispname, datetime(timestamp, 'unixepoch') as date, body_xml FROM Messages where convo_id = #{conversation_id} ORDER BY timestamp")
+    end
   end
 end

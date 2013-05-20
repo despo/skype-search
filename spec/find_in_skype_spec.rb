@@ -19,4 +19,10 @@ describe FindInSkype do
     conversations.should be_an Array
     conversations.first.should be_an Array
   end
+
+  it 'retrieves a conversation' do
+    conversation_details = db.find_conversations.last
+    conversation = db.find_conversation_by_id conversation_details.first
+    conversation.first.should_not be_empty
+  end
 end
