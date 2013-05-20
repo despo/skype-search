@@ -25,4 +25,9 @@ describe FindInSkype do
     conversation = db.find_conversation_by_id conversation_details.first
     conversation.first.should_not be_empty
   end
+
+  it 'searches all conversations for a given text' do
+    conversations = db.search_for "Resistance is futile"
+    conversations.length.should == 2
+  end
 end
