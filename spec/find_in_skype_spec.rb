@@ -12,4 +12,11 @@ describe FindInSkype do
   it 'retrieves all messages of a discussion' do
     db.find_messages_between("find_in_skype").flatten.should include "find_in_skype", "hey ho"
   end
+
+  it 'retrieves all conversations' do
+    conversations =  db.find_conversations
+    conversations.should_not be_empty
+    conversations.should be_an Array
+    conversations.first.should be_an Array
+  end
 end

@@ -12,5 +12,9 @@ module FindInSkype
     def find_messages_between user
       @database.execute("SELECT author, from_dispname, datetime(timestamp, 'unixepoch') as date, body_xml FROM Messages where dialog_partner = '#{user}' ORDER BY timestamp")
     end
+
+    def find_conversations
+      @database.execute("select id, displayname from conversations")
+    end
   end
 end
