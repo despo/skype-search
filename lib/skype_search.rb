@@ -9,5 +9,4 @@ module SkypeSearch
   def self.configure
     SkypeSearch::DB.new(Settings.new.user_db)
   end
-
 end
