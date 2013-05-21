@@ -1,7 +1,7 @@
 require 'sqlite3'
 require 'active_record'
 
-module FindInSkype
+module SkypeSearch
   class DB
     def initialize database
       ActiveRecord::Base.establish_connection({

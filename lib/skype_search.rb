@@ -1,9 +1,9 @@
-require 'find_in_skype/db'
+require 'skype_search/db'
 
-module FindInSkype
+module SkypeSearch
 
   def self.configure
-    FindInSkype::DB.new(Settings.new.user_db)
+    SkypeSearch::DB.new(Settings.new.user_db)
   end
 
   class Settings
