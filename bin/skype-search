@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+require 'skype_search/cli'
+
+cli = SkypeSearch::Cli.new
+
+loop do
+  option = cli.prompt
+  cli.process option
+end
