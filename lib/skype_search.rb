@@ -1,4 +1,6 @@
 require 'skype_search/db'
+require 'skype_search/db/messages'
+require 'skype_search/db/conversations'
 
 module SkypeSearch
 
