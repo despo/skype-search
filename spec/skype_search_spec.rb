@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe SkypeSearch do
 
-  subject(:db) { SkypeSearch::DB.new("#{Dir.pwd}/spec/data/sample.db") }
+  subject(:db) { SkypeSearch::DB.new("#{Dir.pwd}/spec/data/test.db") }
 
   it "retrieve all users that I exchanged messages with" do
     db.find_contacts.should have(1).items
