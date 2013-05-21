@@ -2,8 +2,10 @@ require 'skype_search'
 require 'highline/import'
 module SkypeSearch
   class Cli
+
     def initialize
       @skype_search = SkypeSearch.configure
+      set_color_scheme
     end
 
     def options
@@ -28,11 +30,11 @@ module SkypeSearch
     private
 
     def select_conversation
-      puts @skype_search.find_messages_between(select_contact).map(&:to_s)
+      print "Conversation", @skype_search.find_messages_between(select_contact).map(&:to_s)
     end
 
     def select_group_conversation
-      puts @skype_search.find_conversation_by_id(select_group).map(&:to_s)
+      print "Group conversation", @skype_search.find_conversation_by_id(select_group).map(&:to_s)
     end
 
     def search_for_text
@@ -41,7 +43,7 @@ module SkypeSearch
         question.validate = -> (q)  { q.length >= 3 }
         question.responses[:not_valid] = "You search needs to be at least 3 characters long"
       end
-      puts @skype_search.search_for search_string
+      print "Search results", @skype_search.search_for(search_string)
     end
 
     def exit
@@ -64,6 +66,32 @@ module SkypeSearch
         menu.choices *group_conversations.map(&:to_s)
       end
       group_conversations.select { |con| con.to_s == selection }.first.id
+    end
+
+    def set_color_scheme
+      colors = HighLine::ColorScheme.new do |cs|
+        cs[:headline] = [ :bold, :yellow, :on_black ]
+        cs[:horizontal_line] = [ :bold, :white, :on_blue]
+        cs[:even_row] = [ :yellow ]
+        cs[:odd_row] = [ :gray ]
+      end
+      HighLine.color_scheme = colors
+    end
+
+    def print title=nil, messages
+      print_title title if title
+      messages.each_with_index do |message, index|
+        say("<%= color('#{message}', '#{get_row_color(index)}') %>")
+      end
+    end
+
+    def print_title title
+      say("<%= color('#{title}', :headline) %>")
+      say("<%= color('*'*30, :horizontal_line) %>")
+    end
+
+    def get_row_color index
+      index.odd? ? :odd_row : :even_row
     end
 
   end
