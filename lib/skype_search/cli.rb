@@ -40,7 +40,7 @@ module SkypeSearch
     def search_for_text
       search_string = ask("What are you looking for?") do |question|
         question.case = :up
-        question.validate = -> (q)  { q.length >= 3 }
+        question.validate = ->(q)  { q.length >= 3 }
         question.responses[:not_valid] = "You search needs to be at least 3 characters long"
       end
       print "Search results", @skype_search.search_for(search_string).map(&:to_s)
