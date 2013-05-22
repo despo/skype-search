@@ -1,18 +1,37 @@
 module SkypeSearch
-  module OutputProcessor
+  class OutputProcessor
 
-    EMOTICON_MATCHER = /<ss type=\"(?<type>.*)\">(?<symbol>.*)<\/ss>/
-    EMOTICON_REPLACE = /<ss type=\".*\">.*<\/ss>/
+    EMOTICON_MATCHER = /<ss type=\"(?<type>.{,6})\">(?<symbol>.{,6})<\/ss>/
+    EMOTICON_REPLACE = /<ss type=\".{,6}\">.{,6}<\/ss>/
 
-    def parse message
-      result =  EMOTICON_MATCHER.match(message)
-      replace message, result[:symbol]
+    attr_accessor :output
+
+    def initialize output
+      @output = output
+    end
+
+    def parse
+      replace_all matches unless matches.nil?
+
+      self
     end
 
     private
 
-    def replace message, symbol
-      message.gsub(EMOTICON_REPLACE, colorize(symbol))
+    def matches
+      scan_for_emoticons.map { |emoticon| EMOTICON_MATCHER.match(emoticon) }
+    end
+
+    def scan_for_emoticons
+      @output.scan(EMOTICON_REPLACE)
+    end
+
+    def replace_all matches
+      matches.each { |match| replace(match, match[:symbol]) }
+    end
+
+    def replace match, symbol
+      @output.gsub!(match.to_s, colorize(symbol))
     end
 
     def colorize text, color_code=31
