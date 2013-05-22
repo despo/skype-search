@@ -26,7 +26,7 @@ module SkypeSearch
     end
 
     def search_for string
-      Messages.where('body_xml like ?', string).order(:timestamp)
+      Messages.where('body_xml like ?', %{%#{string}%}).order(:timestamp)
     end
   end
 

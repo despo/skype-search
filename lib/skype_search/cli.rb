@@ -43,7 +43,7 @@ module SkypeSearch
         question.validate = -> (q)  { q.length >= 3 }
         question.responses[:not_valid] = "You search needs to be at least 3 characters long"
       end
-      print "Search results", @skype_search.search_for(search_string)
+      print "Search results", @skype_search.search_for(search_string).map(&:to_s)
     end
 
     def exit
