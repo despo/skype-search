@@ -81,7 +81,9 @@ module SkypeSearch
     def print title=nil, messages
       print_title title if title
       messages.each_with_index do |message, index|
-        say("<%= color('#{message}', '#{get_row_color(index)}') %>")
+        OutputProcessor.new(message).parse
+
+        say(%{<%= color('#{message}', '#{get_row_color(index)}') %>})
       end
     end
 
